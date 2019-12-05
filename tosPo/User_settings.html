@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- ファビコン -->
+    <link rel="shortcut icon" href="../img/fabicon.png">
+    <link rel="apple-touch-icon" href="../img/iphone.png" />
+
+    <title>User Settings</title>
+
+    <!-- MDL導入 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!-- コントロールバー -->
+    <script src="../js/control_bar.js"></script>
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/user_setting.css">
+
+</head>
+
+<body class="body">
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <a class="mdl-navigation__link" href="#"><span class="menu_point">Setting</span></a>
+                <!-- <img class="mdl-layout-title" src="../img/logo.png" alt=""> -->
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                    <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                    <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                    <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                    <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                    <a class="mdl-navigation__link" href="Settings.html"><span class="menu_point">Setting</span></a>
+                    <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                    <a class="mdl-navigation__link" href="../index.html">HOME</a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <img class="mdl-layout-title" src="../img/logo.png" alt="">
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                <a class="mdl-navigation__link" href="Settings.html"><span class="menu_point">Setting</span></a>
+                <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                <a class="mdl-navigation__link" href="../index.html">HOME</a>
+            </nav>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="page-content">
+
+                <div class="top">
+                    <div id="user_state" class="user_name"></div>
+                </div>
+
+
+                <div class="edit">
+                    <p>1.上手く動かない時は、再ログインをお願いします。</p>
+                    <p>2.アイコンを登録する時は、
+                        <br>❶写真を選択
+                        <br>❷2ボタンを押す　※successのアナウンスがでるまでお待ちください
+                        <br>❸UPDATEボタン
+                        <br>の順に押して下さい</p>
+
+                </div>
+
+                <div class="edit_box">
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="name">
+                        <label class="mdl-textfield__label" for="name">User name...</label>
+                    </div>
+                    <button id="update_name"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        update
+                    </button>
+
+                    <p class="pass_p">User icon</p>
+                    <div class="filename"></div>
+                    <label class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect file_buttons">
+                        アイコン画像を選択
+                        <input type="file" id="imgfile" style="display: none">
+                        <span class="img_icon">未選択</span>１
+                    </label>
+
+                    <button id="update_img"
+                        class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                        ２
+                    </button>
+                    <button id="submit"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        update
+                    </button>
+
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="email">
+                        <label class="mdl-textfield__label" for="email">User email...</label>
+                    </div>
+
+                    <button id="update_email"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        update
+                    </button>
+
+                    <p class="pass_p">※必須：6文字以上</p>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="password">
+                        <label class="mdl-textfield__label" for="password">User password...</label>
+                    </div>
+                    <button id="update_password"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        update
+                    </button>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+
+    <script src="../js/jquery-3.3.1.min .js"></script>
+
+    <!-- dbキー -->
+    <script src="../js/firebase_key.js"></script>
+
+    <script>
+        firebase.auth().onAuthStateChanged(function (user) {
+            $(document).ready(function () {
+                // user情報表示
+                var userState = '';
+                userState += `<p>${user.displayName}</p>`;
+                userState += `<img src="${user.photoURL}" alt="" width="80px" height="80px" border="0" />`;
+                $('#user_state').prepend(userState);
+
+                console.log(user.uid);
+                console.log(user.displayName);
+                console.log(user.email);
+            });
+        });
+
+
+        $(function () {
+            // グローバル変数を定義
+            var file_url;
+            var file_blob;
+            var doc_id;
+
+            // インスタンス：設計図をもとに作り上げられたモノ＝形が出来上がっている
+            // formインスタンスの定義
+            const form = document.querySelector('form');
+            // cloudStorageインスタンスを作成
+            const storage = firebase.storage();
+
+            // グローバル変数を定義
+            var file_name;
+            var blob;
+
+            // 送信-------------------------------------------------------------
+            $('#update_name').on('click', function () {
+                var user = firebase.auth().currentUser;
+
+                user.updateProfile({
+                    displayName: $('#name').val(),
+                }).then(function () {
+                    // Update successful.
+                    alert('アップデートが完了しました');
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 3);
+
+                }).catch(function (error) {
+                    // An error happened.
+                    console.log(error);
+                    alert(error.message); setTimeout(function () {
+                        signOut();
+                    }, 5);
+                });
+
+                $('#name').val('');
+                console.log(user.displayName);
+            });
+
+            // imgfileの変更で処理開始（変更があった要素がeで返される）
+            imgfile.addEventListener("change", e => {
+                $('.img_icon').addClass('select').html('選択中');
+
+                var file = e.target.files;
+                // fileの名前を取得
+                file_name = file[0].name;
+                // blob形式に変換（マルチメディアの格納形式,jpegに変換）
+                blob = new Blob(file, { type: "image/jpeg" });
+                console.warn(blob);
+
+                console.log(file_name);
+            });
+
+            // upload項目の処理
+            $('#update_img').on('click', function (e) {
+
+                alert('successまでお待ちください');
+                // ページ遷移をなくす
+                e.preventDefault();
+
+                // storageのarea_imagesへの参照を定義
+                // storageの参照
+                var storageRef = storage.ref('chat_file/').child(file_name);
+                console.log(storageRef);
+
+                storageRef.put(blob).then(snapshot => {
+                    console.log(snapshot.state);
+                    // アップロードしたファイルのurlを取得
+                    storageRef.getDownloadURL().then(url => {
+                        file_url = url;
+                    }).catch(error => {
+                        console.log(error);
+                    });
+
+                    alert(snapshot.state);
+                });
+
+                file_blob = blob;
+                console.log(file_blob.type);
+
+                // valueリセットする
+                file_name = '';
+                blob = '';
+
+                console.log(file_blob);
+
+            });
+
+            // imgfileの変更で処理開始（変更があった要素がeで返される）
+            imgfile.addEventListener("change", e => {
+                var file = e.target.files;
+                // fileの名前を取得
+                file_name = file[0].name;
+                // blob形式に変換（マルチメディアの格納形式,jpegに変換）
+                blob = new Blob(file, { type: "image/jpeg" });
+                console.warn(blob);
+                console.log(file_name);
+                $('.image_box').find('.img_icon').addClass('select').html('選択中');
+                //ファイル名を表示
+                $('.filename').html('ファイル名：' + file_name);
+            });
+
+            $('#submit').on('click', function () {
+                var user = firebase.auth().currentUser;
+                console.log(file_url);
+
+                user.updateProfile({
+                    photoURL: file_url
+                }).then(function () {
+                    // Update successful.
+                    alert('アップデートが完了しました');
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 3);
+
+                }).catch(function (error) {
+                    // An error happened.
+                    console.log(error);
+                    alert(error.message); setTimeout(function () {
+                        signOut();
+                    }, 5);
+                });
+
+                $('#update_img').val('');
+                console.log(user.photoURL);
+
+                $('.filename').html('ファイル名：');
+                $('.img_icon').removeClass('select').html('未選択');
+
+            });
+
+
+            $('#update_email').on('click', function () {
+                var email = $('#email').val()
+                console.log(email);
+
+                var user = firebase.auth().currentUser;
+
+                user.updateEmail(email).then(function () {
+                    // Update successful.
+                    alert('確認メールを送信します');
+                    setTimeout(function () {
+                        user.sendEmailVerification().then(function () {
+                            // Email sent.h
+                        }).catch(function (error) {
+                            // An error happened.
+                            console.log(error);
+                            alert(error.message);
+                        });
+                    }, 3);
+
+                }).catch(function (error) {
+                    // An error happened.
+                    console.log(error);
+                    alert(error.message); setTimeout(function () {
+                        signOut();
+                    }, 5);
+                });
+
+                $('#email').val('');
+
+            });
+
+
+            $('#update_password').on('click', function () {
+                var user = firebase.auth().currentUser;
+                var newPassword = $('#password').val()
+                var email = user.email;
+                console.log(email);
+
+
+                user.updatePassword(newPassword).then(function () {
+                    // Update successful.
+                    alert('パスワード再設定メールを送信します');
+                    setTimeout(function () {
+                        var auth = firebase.auth();
+                        auth.sendPasswordResetEmail(email).then(function () {
+                            // Email sent.
+                            alert('アップデートが完了しました');
+                        }).catch(function (error) {
+                            // An error happened.
+                            console.log(error);
+                            alert(error.message);
+                        });
+                    }, 3);
+
+                }).catch(function (error) {
+                    // An error happened.
+                    console.log(error);
+                    alert(error.message);
+                    setTimeout(function () {
+                        signOut();
+                    }, 5);
+                });
+
+                $('#password').val('');
+
+            });
+
+
+
+        });
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- ファビコン -->
+    <link rel="shortcut icon" href="../img/fabicon.png">
+    <link rel="apple-touch-icon" href="../img/iphone.png" />
+
+    <title>tosPo Login</title>
+    <!-- MDL導入 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/3.5.2/firebase-ui-auth__ja.js"></script>
+    <!-- dbキー -->
+    <script src="../js/firebase_key.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    <link rel="stylesheet" href="../css/login.css">
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>tosPo Login</h1>
+    <div id="loader">Loading...</div>
+    <div id="firebaseui-auth-container"></div>
+
+
+
+    <div>
+        <a class="hp" href="../index.html">ホームページはコチラ</a>
+    </div>
+
+    <script>
+
+        // FirebaseUIインスタンス初期化
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+        // FirebaseUIの各種設定
+        var uiConfig = {
+            callbacks: {
+                signInSuccess: function (currentUser, credential, redirectUrl) {
+                    //２ サインイン成功時のコールバック関数
+                    // 戻り値で自動的にリダイレクトするか指定
+                    return true;
+                },
+                uiShown: function () {
+                    //１ FirebaseUIウィジェット描画完了時のコールバック関数
+                    // loadingを削除
+                    document.getElementById('loader').style.display = 'none';
+                }
+            },
+            // リダイレクトではなく、ポップアップでサインインフローを表示
+            signInFlow: 'popup',
+            signInSuccessUrl: 'Messages.html',//../done.html '../tosPo/Messages.html'
+            signInOptions: [
+                // サポートするプロバイダ(メールアドレス)を指定
+                firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID
+            ]
+        };
+
+        ui.start('#firebaseui-auth-container', uiConfig);
+
+
+        // // ユーザー情報がない-------------------------------
+        // if (user === null) {
+        //     showMessage('Not Login', 'ログインが必要です');
+        //     return (false);
+        // }
+
+        //     // メアド確認済み------------------------------------
+        //     if (user.emailVerified) {
+        //         showMessage('Login Complete!', `${user.displayName}さんがログインしました`);
+
+        //         actionCodeSettings = {
+        //             url: "../html/messages.html"
+        //         };
+        //         user.sendEmailVerification(actionCodeSettings)
+
+        //     }
+
+        //     // メアド未確認------------------------------------
+        //     else {
+        //         user.sendEmailVerification()
+        //             .then(() => {
+        //                 showMessage('Send confirm mail', `${user.email}宛に確認メールを送信しました`);
+        //             })
+        //             .catch((error) => {
+        //                 showMessage('[Error] Can not send mail', `${user.email}宛に確認メールを送信できませんでした: ${error}`);
+        //             });
+        //     }
+        // });
+
+        // FirebaseUI描画開始
+    </script>
+
+</body>
+
+
+
+</html>

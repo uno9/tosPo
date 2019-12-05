@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- ファビコン -->
+    <link rel="shortcut icon" href="../img/fabicon.png">
+    <link rel="apple-touch-icon" href="../img/iphone.png" />
+
+    <title>NGword</title>
+
+    <!-- MDL導入 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!-- コントロールバー -->
+    <script src="../js/control_bar.js"></script>
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/ngword.css">
+</head>
+
+<body class="body">
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <a class="mdl-navigation__link" href="#"><span class="menu_point">Setting</span></a>
+                <!-- <img class="mdl-layout-title" src="../img/logo.png" alt=""> -->
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                    <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                    <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                    <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                    <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                    <a class="mdl-navigation__link" href="Settings.html"><span class="menu_point">Setting</span></a>
+                    <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                    <a class="mdl-navigation__link" href="../index.html">HOME</a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <img class="mdl-layout-title" src="../img/logo.png" alt="">
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                <a class="mdl-navigation__link" href="Settings.html"><span class="menu_point">Setting</span></a>
+                <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                <a class="mdl-navigation__link" href="../index.html">HOME</a>
+            </nav>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="page-content">
+
+                <div class="top">
+                    <!-- <div id="user_state" class="user_name"></div> -->
+                    <!-- <div id="login_txt"></div> -->
+                </div>
+
+                <div>
+                    <div class="NG_count">
+                        <p>あなたのNGword数は</p>
+                        <div id="NoutputCount">0</div>
+                        <p>です</p>
+                    </div>
+
+
+                    <div class="Noutput_box">
+                        <div id="Noutput" class="Noutput"> </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <!-- first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+    <!-- dbキー -->
+    <script src="../js/firebase_key.js"></script>
+
+    <!-- コントロールバー -->
+    <script src="../js/control_bar.js"></script>
+    <!-- 検索、クリックアクション -->
+    <script src="../js/output.js"></script>
+
+    <script src="../js/jquery-3.3.1.min .js"></script>
+
+    <script>
+        var auth_uid;
+        // ログイン情報を取得
+        firebase.auth().onAuthStateChanged(function (user) {
+            $(document).ready(function () {
+                if (user !== null) {
+                    // user情報表示                    
+                    var userState = '';
+                    userState += `<p class='name'>${user.displayName}</p>`;
+                    userState += `<img src="${user.photoURL}" alt="" width="80px" height="80px" border="0" />`;
+                    $('#user_state').prepend(userState);
+                    console.log(user.displayName);
+                    console.log(user.uid);
+                    console.log(user.photoURL);
+                    auth_uid = user.uid;
+
+                } else {
+                    // No user is signed in.
+                    $('#timer').remove();
+                    $('#menu').remove();
+                    var login_txt = '<a href="Login.html">登録・ログインはコチラ</a>';
+                    var menu = document.getElementById('login_txt');
+                    console.log(menu);
+                    menu.innerHTML = login_txt;
+                }
+            });
+        });
+
+        // データベースの参照を準備(グローバル変数)
+        var NGwordRef = firebase.firestore().collection('NGWORD');
+
+        NGwordRef.get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                var searchID;
+                // var searchID_user;
+                var searchdelete;
+                console.log(doc.id);
+                searchdelete = doc.id;
+                search_text = doc.data().text;
+                // console.log(search_text);
+                searchID_user = doc.data().user_ID;
+                // console.log(searchID_user);
+
+                if (doc.data() == null) {
+                    $('#Noutput').html('NGwordはありません');
+                } else {
+                    // messagesで検索する
+
+                    var doc_id = doc.id;
+                    // console.log(res.data());
+                    // console.log(res_id);
+                    // console.log(res.data().user_ID);
+                    // console.log(res.data().text);
+
+                    var nstr = [];
+                    nstr += `<div id="${doc_id}">`;
+                    nstr += `<p id="${doc.data().user_ID}" class="user_ID"></p>`;
+                    nstr += `<ul>`;
+                    nstr += `<li id="${doc_id}" class="NGword">${doc.data().text}</li>`;
+                    nstr += `<button id=${searchdelete} class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col NG_delete"><i class="material-icons">delete_forever</i></button>`;
+                    nstr += `</ul>`;
+                    nstr += `</div>`;
+                    $('#Noutput').prepend(nstr);
+
+                    var element = document.getElementById('Noutput');
+                    var childs = element.childElementCount;
+                    $('#NoutputCount').html(childs);
+                };
+            });
+        });
+
+        // NG削除button-------------------------------
+        // NDWORDコレクション削除
+        $('#Noutput').on('click', '.NG_delete', function () {
+            // clickを押した子要素の親idを取得
+            var divID = $(this).attr('id');
+            console.log(divID);
+
+            NGwordRef.doc(divID).delete().then(function () {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 3);
+
+            }).catch(function (error) {
+                console.error('error removing document:', error);
+            });
+            localStorage.removeItem(divID);
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

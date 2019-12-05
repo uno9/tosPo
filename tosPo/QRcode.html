@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>QRcode</title>
+
+</head>
+
+<body>
+    <div id="meetID"></div>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://tospo.netlify.com/&amp;size=100x100&amp;format=svg&amp;color=1d417a&amp;bgcolor=f7f6eb"
+        alt="">
+    <!-- <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://tospo.netlify.com/OthersOutput?id=mTWXKA861OXSpC5PXRtoopFuU033&amp;size=100x100&amp;format=svg&amp;color=1d417a&amp;bgcolor=f7f6eb" -->
+    <!-- alt=""> -->
+
+    <!-- first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+
+
+    <!-- dbキー -->
+    <script src="../js/firebase_key.js"></script>
+
+    <script src="../js/jquery-3.3.1.min .js"></script>
+
+
+    <script>
+        // ログイン情報を取得---------------------------------
+        firebase.auth().onAuthStateChanged(function (user) {
+            $(document).ready(function () {
+                // user情報表示
+                var userState = '';
+                // userState += `<p>${user.displayName}</p>`;
+                // userState += `<img src="${user.photoURL}" alt="" width="100px" height="100px" border="0" />`;
+                $('#user_state').prepend(userState);
+
+                localStorage.setItem('userID', user.uid);
+                localStorage.setItem('userNAME', user.displayName);
+                console.log(user.displayName);
+                console.log(user.uid);
+                console.log(user.photoURL);
+            });
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>

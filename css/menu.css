@@ -1,0 +1,30 @@
+.mdl-layout__header-row{
+    background-color: #fefefe;
+}
+header.mdl-layout__header.is-casting-shadow{
+        background: #fefefe;
+}
+
+.mdl-layout__header .mdl-layout__drawer-button {
+    position: absolute;
+    color: rgb(244,67,54);
+    background-color: inherit;
+}
+
+img.mdl-layout-title {
+    width: 100px;
+}
+
+.mdl-layout__drawer.is-visible{
+    color: #de4020;
+}
+
+.mdl-layout__header-row .mdl-navigation__link {
+    color: gray;
+}
+
+span.menu_point{
+    color: brown;
+    font-size: 23px;
+    font-weight: 500;
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- ファビコン -->
+    <link rel="shortcut icon" href="../img/fabicon.png">
+    <link rel="apple-touch-icon" href="../img/iphone.png" />
+
+    <title>Settings</title>
+
+    <!-- MDL導入 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!-- コントロールバー -->
+    <script src="../js/control_bar.js"></script>
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/setting.css">
+
+</head>
+
+<body class="body">
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <a class="mdl-navigation__link" href="#"><span class="menu_point">Setting</span></a>
+                <!-- <img class="mdl-layout-title" src="../img/logo.png" alt=""> -->
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                    <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                    <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                    <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                    <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                    <a class="mdl-navigation__link" href="Settings.html"><span class="menu_point">Setting</span></a>
+                    <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                    <a class="mdl-navigation__link" href="../index.html">HOME</a>
+                </nav>
+            </div>
+        </header>
+
+
+        <div class="mdl-layout__drawer">
+            <img class="mdl-layout-title" src="../img/logo.png" alt="">
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                <a class="mdl-navigation__link" href="Settings.html"><span class="menu_point">Setting</span></a>
+                <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                <a class="mdl-navigation__link" href="../index.html">HOME</a>
+            </nav>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="page-content">
+
+                <!-- <div class="top">
+                    <div id="user_state" class="user_name"></div>
+                </div> -->
+
+
+                <div class="setting_buttons">
+                    <ul>
+                        <li id="profile"><i class="material-icons">
+                                account_box
+                            </i>User編集</li>
+
+                        <li id="card"><i class="material-icons">
+                                assignment
+                            </i>Card編集</li>
+
+                        <!-- <li id="NGword"><i class="material-icons">
+                                format_color_text
+                            </i>NG編集</li> -->
+
+                    </ul>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+
+    <script src="../js/jquery-3.3.1.min .js"></script>
+
+    <!-- dbキー -->
+    <script src="../js/firebase_key.js"></script>
+
+    <script>
+        $('#profile').on('click', function () {
+            window.location.href = 'User_settings.html';
+        });
+
+        $('#card').on('click', function () {
+            window.location.href = 'Card_set.html';
+        });
+
+
+        $('#NGword').on('click', function () {
+            window.location.href = 'NGword.html';
+        });
+
+        // ログイン情報を取得---------------------------------
+        firebase.auth().onAuthStateChanged(function (user) {
+            $(document).ready(function () {
+                // user情報表示
+                var userState = '';
+                userState += `<p>${user.displayName}</p>`;
+                userState += `<img src="${user.photoURL}" alt="" width="80px" height="80px" border="0" />`;
+                $('#user_state').prepend(userState);
+
+                localStorage.setItem('userID', user.uid);
+
+                console.log(user.displayName);
+                console.log(user.uid);
+                console.log(user.photoURL);
+                // }
+            });
+        });
+
+
+    </script>
+
+</body>
+
+</html>

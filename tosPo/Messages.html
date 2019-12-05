@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- ファビコン -->
+    <link rel="shortcut icon" href="../img/fabicon.png">
+    <link rel="apple-touch-icon" href="../img/iphone.png" />
+
+    <title>POST</title>
+
+    <!-- MDL導入 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- コントロールバー -->
+    <script src="../js/control_bar.js"></script>
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/messages.css">
+</head>
+
+<body class="body">
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <a class="mdl-navigation__link" href="#"><span class="menu_point">POST</span></a>
+                <!-- <img class="mdl-layout-title" src="../img/logo.png" alt=""> -->
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="Messages.html"><span class="menu_point">POST</span></a>
+                    <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                    <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                    <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                    <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                    <a class="mdl-navigation__link" href="Settings.html">Setting</a>
+                    <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                    <a class="mdl-navigation__link" href="../index.html">HOME</a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <img class="mdl-layout-title" src="../img/logo.png" alt="">
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="Messages.html"><span class="menu_point">POST</span></a>
+                <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                <a class="mdl-navigation__link" href="Settings.html">Setting</a>
+                <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                <a class="mdl-navigation__link" href="../index.html">HOME</a>
+            </nav>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="page-content">
+
+
+                <div class="post_box">
+
+                    <div class="stamp_box">
+                        <img src="../img/stamp.png" id="stamp" class="stamp" alt="">
+                    </div>
+
+                    <div class="contents_box">
+                        <!-- 選択ファイル名を表示 -->
+                        <div class="filename"></div>
+
+                        <div class="image_box">
+                            <label
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect file_buttons">
+                                写真を選択
+                                <input type="file" id="imgfile" style="display: none">
+                                <span class="img_icon">未選択</span>１
+                            </label>
+
+                            <label
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect file_buttons">
+                                音声を選択
+                                <input type="file" id="audiofile" style="display: none">
+                                <span class="audio_icon">未選択</span>１
+                            </label>
+
+                            <label
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect file_buttons">
+                                動画を選択
+                                <input type="file" id="videofile" style="display: none">
+                                <span class="video_icon">未選択</span>1
+                            </label>
+
+                            <button id="upload"
+                                class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                                2
+                            </button>
+
+                        </div>
+
+                        <div class="text_box">
+                            <p><span class="top_text">Text</span> 　制限：<span id="txtlmt">400</span>文字</p>
+
+                            <div class="mdl-textfield mdl-js-textfield mdl-cell--order-N-phone">
+                                <textarea class="mdl-textfield__input mdl-cell--order-N-phone" type="text" id="text"
+                                    maxlength="400"></textarea>
+                                <label class="mdl-textfield__label mdl-cell--order-N-phone" for="text">Text ...</label>
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button id="start"
+                                class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col"><i
+                                    class="material-icons">mic</i></button>
+                            <button id="stop"
+                                class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col"><i
+                                    class="material-icons">mic_off</i></button>
+
+                            <button id="send"
+                                class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored  mdl-cell mdl-cell--1-col">
+                                送信</button>
+                            <button id="clear"
+                                class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect  mdl-cell mdl-cell--1-col">
+                                削除</button>
+
+                        </div>
+
+                        <!-- <div id="messages_count">0</div> -->
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+
+    <!-- first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+
+    <script src="../js/jquery-3.3.1.min .js"></script>
+
+    <!-- dbキー -->
+    <script src="../js/firebase_key.js"></script>
+
+    <!-- 音声認識によるチャット文入力 -->
+    <script type="text/javascript" src="../js/recognition.js"></script>
+    <!-- imgの配列処理 -->
+    <script src="../js/img.js"></script>
+    <!-- day.jsの実装 -->
+    <script src="../js/day.js"></script>
+    <script src="../js/day_local.js"></script>
+    <script src="../js/day_plugin.js"></script>
+
+    <script>
+        var usersRef = firebase.firestore().collection('USERS');
+
+        // 日時の取得
+        var date = dayjs().format('YYYY/MM/DD HH:mm A', ' JA');
+        var date2 = dayjs().format('YYYY/MM/DD', ' JA');
+        console.log(date2);
+
+        // var auth_ID;
+        // ログイン完了後はonAuthStateChangedでユーザーオブジェクトを取得可能
+        firebase.auth().onAuthStateChanged(function (user) {
+            $(document).ready(function () {
+                // user情報表示
+                var userState = '';
+                userState += `<p>${user.displayName}</p>`;
+                userState += `<img src="${user.photoURL}" alt="" width="80px" height="80px" border="0" />`;
+                $('#user_state').prepend(userState);
+
+
+                localStorage.setItem('userID', user.uid);
+                localStorage.setItem('userTimeID', date + '_' + user.uid);
+                localStorage.setItem('userNAME', user.displayName);
+
+                console.log(user.displayName);
+                console.log(user.uid);
+                console.log(user.email);
+                // auth_ID = user.uid;
+            });
+            // console.log(auth_ID);
+
+            // 音声認識
+            $(document).ready(function () {
+                SpeechRecognition();
+            });
+
+
+            // messageの送信処理
+            // データベースの参照を準備(グローバル変数)
+            var messagesRef = firebase.firestore().collection('MESSAGES');
+            var usersRef = firebase.firestore().collection('USERS');
+
+            // メディア処理+日時----------------------------------------------------------
+
+            // グローバル変数を定義
+            var file_url;
+            var file_blob;
+            var doc_id;
+
+            // インスタンス：設計図をもとに作り上げられたモノ＝形が出来上がっている
+            // formインスタンスの定義
+            const form = document.querySelector('form');
+            // cloudStorageインスタンスを作成
+            const storage = firebase.storage();
+
+            // グローバル変数を定義
+            var file_name;
+            var blob;
+
+
+            // imgfileの変更で処理開始（変更があった要素がeで返される）
+            imgfile.addEventListener("change", e => {
+                var file = e.target.files;
+                // fileの名前を取得
+                file_name = file[0].name;
+                // blob形式に変換（マルチメディアの格納形式,jpegに変換）
+                blob = new Blob(file, { type: "image/jpeg" });
+                console.warn(blob);
+                console.log(file_name);
+                $('.image_box').find('.img_icon').addClass('select').html('選択中');
+                //ファイル名を表示
+                $('.filename').html('ファイル名：' + file_name);
+            });
+
+            // audiofileの変更で処理開始（変更があった要素がeで返される）
+            audiofile.addEventListener("change", e => {
+                var file = e.target.files;
+                // fileの名前を取得
+                file_name = file[0].name;
+                // blob形式に変換（マルチメディアの格納形式,mpegに変換）
+                blob = new Blob(file, { type: "audio/mpeg" });
+                console.warn(blob);
+                $('.image_box').find('.audio_icon').addClass('select').html('選択中');
+                //ファイル名を表示
+                $('.filename').html('ファイル名：' + file_name);
+            });
+
+            // videofileの変更で処理開始（変更があった要素がeで返される）
+            videofile.addEventListener("change", e => {
+                var file = e.target.files;
+                // fileの名前を取得
+                file_name = file[0].name;
+                // blob形式に変換（マルチメディアの格納形式,mpegに変換）
+                blob = new Blob(file, { type: "video/mpeg" });
+                console.warn(blob);
+                $('.image_box').find('.video_icon').addClass('select').html('選択中');
+                //ファイル名を表示
+                $('.filename').html('ファイル名：' + file_name);
+            });
+
+            // upload項目の処理
+            $('#upload').on('click', function (e) {
+                alert('successの表示が出た後に送信ボタンを押してください');
+                // ページ遷移をなくす
+                e.preventDefault();
+
+                // storageのarea_imagesへの参照を定義
+                // storageの参照
+                var storageRef = storage.ref('chat_file/').child(file_name);
+                console.log(storageRef);
+
+                storageRef.put(blob).then(snapshot => {
+                    console.log(snapshot.state)
+                    // アップロードしたファイルのurlを取得
+                    storageRef.getDownloadURL().then(url => {
+
+                        file_url = url;
+                        console.log(file_url);
+
+                    }).catch(error => {
+                        console.log(error);
+                    });
+                    alert(snapshot.state);
+                });
+
+                file_blob = blob;
+                console.log(file_blob.type);
+
+                // valueリセットする
+                file_name = '';
+                blob = '';
+            });
+
+            console.log(file_blob);
+
+            // 送信-------------------------------------------------------------
+            // 送信制限
+
+            // // 投稿数カウント
+            // var chat_count = 0; //5
+            // var postCount = localStorage.getItem(`${user.uid}:postCount`);
+            // console.log(postCount);
+            // if (postCount !== null) {
+            //     // 投稿場所 sum_messages
+            //     var sum_messages = document.getElementById('messages_count');
+            //     sum_messages.innerHTML = postCount;
+            // }
+
+            // var userRefCount;
+            // usersRef.get().then((querySnapshot) => {
+            //     querySnapshot.forEach((doc) => {
+            //         if (user.uid == doc.id) {
+            //             userRefCount = doc.data().my_count;
+            //             console.log(doc.data().my_count);
+            //         }
+            //     });
+            // });
+            // var ref_count = 1;
+
+            var userRefCount;
+            usersRef.doc("messages_" + user.uid).get().then(function (doc) {
+                userRefCount = doc.data().my_count;
+                console.log(userRefCount);
+                // console.log(doc.data().my_count);
+            });
+            var ref_count = 1;
+
+            $(function () {
+                $("textarea").keyup(function () {
+                    var txtcount = $(this).val().length;
+                    var txtSubtraction = 400 - txtcount;
+                    $("#txtlmt").text(txtSubtraction);
+                    if (txtSubtraction == 400) {
+                        $("#txtlmt").text("400");
+                    }
+                    if (txtSubtraction >= 10) {
+                        $("#txtlmt").css("color", "#333");
+                    } else {
+                        $("#txtlmt").css("color", "#d577ab");
+                    }
+                    if (txtSubtraction <= 0) {
+                        $("#txtlmt").text("0");
+                    }
+                });
+            });
+
+            // 新規メッセージを投稿
+            $('#send').on('click', function () {
+
+                $('.stamp').attr('src', '../img/stamp_2.png');
+
+                // // // 投稿数チェック
+                // // chat_count++;
+                // // console.log(chat_count);
+                // // console.log(postCount);
+                // // // 投稿場所 sum_display
+                // // var sum_display = document.getElementById('messages_count');
+                // // if (postCount !== null) {
+                // //     // postCountに何か入っていれば足す
+                // //     var sum_messages = parseInt(chat_count) + parseInt(postCount);
+                // //     localStorage.setItem(`${user.uid}:postCount`, sum_messages);
+                // //     sum_display.innerHTML = sum_messages;
+                // //     console.log('messages_state', sum_messages);
+
+                // } else {
+                //     // 何も入っていなければ０からスタート
+                //     console.log('chat_count', chat_count);
+                //     sum_display.innerHTML = chat_count;
+                //     // 投稿数の格納(userID+count)
+                //     localStorage.setItem(`${user.uid}:postCount`, chat_count);
+                // }
+
+                // // 表示されている投稿数をとってくる
+                // var messages_state = $(sum_display).text();
+                // console.log(messages_state);
+                // // 投稿制限3通
+                // if (messages_state <= 5) {
+                //     alert('制限に達しました。');
+                //     setTimeout(function () {
+                //         window.location.href = 'MyOutput.html';
+                //     }, 3);
+                // }
+
+                // console.log(ref_count);
+                // -------------------------------------------
+                var localID = localStorage.getItem('userID');
+                var localTimeID = localStorage.getItem('userTimeID');
+                var localNAME = localStorage.getItem('userNAME');
+                console.log('file:' + file_url);
+                // ----------------------------------------------
+                if (file_blob != null) {
+                    // // 総投稿数チェック
+                    if (userRefCount == null) {
+                        // カウントのupdate
+                        usersRef.doc("messages_" + localID).set({
+                            my_count: 1,
+                        });
+                        console.log('no');
+                    } else {
+                        console.log('yes');
+                        usersRef.doc("messages_" + localID).set({
+                            my_count: parseInt(userRefCount) + parseInt(ref_count++)
+                        });
+                    }
+                    console.log(localID);
+                    messagesRef.add({
+                        messages_ID: date + '_' + localTimeID,
+                        user_ID: localID,
+                        user_NAME: localNAME,
+                        text: $('#text').val(),
+                        file: file_url,
+                        blob: file_blob.type,
+                        posttime: date,
+                        time: date2
+                    })
+                    $('#text').val('');
+                    $('#imgfile').val('');
+                    $('#audiofile').val('');
+                    $('#videofile').val('');
+
+                    file_url = null;
+                    file_blob = null;
+
+                } else {
+
+                    // // 総投稿数チェック
+                    if (userRefCount == null) {
+                        // カウントのupdate
+                        usersRef.doc("messages_" + localID).set({
+                            my_count: 1 //sum
+                        });
+                        console.log('no');
+                    } else {
+                        console.log('yes');
+                        usersRef.doc("messages_" + localID).set({
+                            my_count: parseInt(userRefCount) + parseInt(ref_count++)
+                        });
+                    }
+
+                    var img = Math.floor(Math.random() * (imgArr.length));
+                    var num = imgArr[img];
+
+                    messagesRef.add({
+                        messages_ID: date + '_' + localTimeID,
+                        user_ID: localID,
+                        user_NAME: localNAME,
+                        text: $('#text').val(),
+                        file: num,
+                        blob: "image/jpeg",
+                        posttime: date,
+                        time: date2
+                    })
+                    $('#text').val('');
+                    $('#imgfile').val('');
+                    $('#audiofile').val('');
+                    $('#videofile').val('');
+
+                    file_url = null;
+                    file_blob = null;
+                }
+
+                $("#txtlmt").text('400');
+                $('.filename').html('ファイル名：');
+                $('.image_box').find('.img_icon').removeClass('select').html('未選択');
+                $('.image_box').find('.audio_icon').removeClass('select').html('未選択');
+                $('.image_box').find('.video_icon').removeClass('select').html('未選択');
+
+                setTimeout(function () {
+                    $('.stamp').attr('src', '../img/IMG_8321.jpg');
+                }, 800);
+
+
+            });
+
+            // 削除-------------------------------
+
+            $('#clear').on('click', function () {
+                $('#text').val('');
+                $('#imgfile').val('');
+                $('#audiofile').val('');
+                $('#videofile').val('');
+
+                file_url = null;
+                file_blob = null;
+
+                console.log(file_url);
+                console.log(file_blob);
+
+            });
+        });
+
+    </script>
+</body>
+
+</html>

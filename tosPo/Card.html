@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- ファビコン -->
+    <link rel="shortcut icon" href="../img/fabicon.png">
+    <link rel="apple-touch-icon" href="../img/iphone.png" />
+
+    <title>Card</title>
+
+    <!-- MDL導入 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+
+    <!-- コントロールバー -->
+    <script src="../js/control_bar.js"></script>
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/card.css">
+</head>
+
+<body class="body">
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <a class="mdl-navigation__link" href="#"><span class="menu_point">My Card</span></a>
+                <!-- <img class="mdl-layout-title" src="../img/logo.png" alt=""> -->
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                    <a class="mdl-navigation__link" href="Card.html"><span class="menu_point">My Card</span></a>
+                    <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                    <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                    <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                    <a class="mdl-navigation__link" href="Settings.html">Setting</a>
+                    <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                    <a class="mdl-navigation__link" href="../index.html">HOME</a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <img class="mdl-layout-title" src="../img/logo.png" alt="">
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                <a class="mdl-navigation__link" href="Card.html"><span class="menu_point">My Card</span></a>
+                <a class="mdl-navigation__link" href="Mypage.html">My Page</a>
+                <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                <a class="mdl-navigation__link" href="Settings.html">Setting</a>
+                <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                <a class="mdl-navigation__link" href="../index.html">HOME</a>
+            </nav>
+        </div>
+
+
+        <main class="mdl-layout__content">
+            <div class="page-content">
+
+                <aside class="profile-card">
+                    <header>
+                        <div id="user_state"></div>
+                        <div id="user_name"></div>
+
+                        <div class="card_display">
+                            <div id="Coutput"></div>
+                            <div id="CuserID"></div>
+
+                            <button id="clip"
+                                class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col"><i
+                                    class="material-icons">file_copy</i></button>
+                        </div>
+
+                        <div id="meetID"></div>
+
+                    </header>
+
+                </aside>
+            </div>
+    </div>
+    </main>
+    </div>
+
+    <!-- first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+
+
+    <!-- dbキー -->
+    <script src="../js/firebase_key.js"></script>
+    <!-- 検索、クリックアクション -->
+    <script src="../js/output.js"></script>
+    <!-- day.jsの実装 -->
+    <script src="../js/day.js"></script>
+    <script src="../js/day_local.js"></script>
+    <script src="../js/day_plugin.js"></script>
+    <!-- card情報取得 -->
+    <script src="../js/output.js"></script>
+    <!-- jquery -->
+    <script src="../js/jquery-3.3.1.min .js"></script>
+
+    <script>
+
+        // 日時の取得-----------------------------------------
+        var date = dayjs().format('YYYY/MM/DD HH:mm A', ' JA');
+        console.log(date);
+
+        // ログイン情報を取得---------------------------------
+        firebase.auth().onAuthStateChanged(function (user) {
+            $(document).ready(function () {
+                // user情報表示
+                var userState = '';
+                // userState += `<p>${user.displayName}</p>`;
+                userState += `<img src="${user.photoURL}" alt="" width="100px" height="100px" border="0" />`;
+                $('#user_state').prepend(userState);
+
+                localStorage.setItem('userID', user.uid);
+                // localStorage.setItem('userNAME', user.displayName);
+                console.log(user.displayName);
+                console.log(user.uid);
+                console.log(user.photoURL);
+
+            });
+            $('#meetID').prepend(`<img src="https://api.qrserver.com/v1/create-qr-code/?data=https://tospo.netlify.com/tospo/othersoutput?id=${user.uid}&size=100x100&format=svg&color=1d417a&bgcolor=f7f6eb"
+                alt="" />`)
+            $('#user_name').html(`<h1 class="name">${user.displayName}</h1>`);
+
+        });
+
+        var auth_uid = localStorage.getItem('userID');
+
+        // データベースの参照を準備(グローバル変数)----------
+        var cardRef = firebase.firestore().collection('CARD');
+        var messagesRef = firebase.firestore().collection('MESSAGES');
+
+        // データ検索表示
+        $(document).ready(function () {
+            $('#Coutput').prepend(mycard());
+        });
+
+        // $('#CuserID').prepend("<p>yourID:</p>" + `<input type="text" class="display_ID" value="${auth_uid}" readonly="readonly" >`);//style="border:none"
+        $('#CuserID').prepend("<p>yourID:</p> " + `<textarea type="text" id="display_ID" class="display_ID" value="${auth_uid}" readonly="readonly">${auth_uid}</textarea>`);
+
+        $('#clip').on('click', function () {
+            var copyText = document.querySelector(".display_ID");
+            console.log(copyText);
+            copyText.select();
+            document.execCommand("copy");
+            alert('IDをコピーしました。');
+        });
+
+
+        // var elm = $("#display_ID")[0];
+
+        // //select()でtextarea内の文字を選択
+        // elm.select();
+
+        // //rangeでtextarea内の文字を選択
+        // var range = document.createRange();
+        // range.selectNodeContents(elm);
+        // var sel = window.getSelection();
+        // sel.removeAllRanges();
+        // sel.addRange(range);
+        // elm.setSelectionRange(0, 999999);
+
+        // //execCommandを実施
+        // document.execCommand("copy");
+        // console.log('copy');
+
+
+    </script>
+
+</body>
+
+</html>

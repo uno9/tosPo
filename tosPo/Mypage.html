@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- ファビコン -->
+    <link rel="shortcut icon" href="../img/fabicon.png">
+    <link rel="apple-touch-icon" href="../img/iphone.png" />
+
+    <title>My Portfolio</title>
+
+    <!-- MDL導入 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-amber.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!-- コントロールバー -->
+    <script src="../js/control_bar.js"></script>
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/myoutput.css">
+
+</head>
+
+<body class="body">
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <a class="mdl-navigation__link" href="#"><span class="menu_point">My Page</span></a>
+                <!-- <img class="mdl-layout-title" src="../img/logo.png" alt=""> -->
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                    <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                    <a class="mdl-navigation__link" href="Mypage.html"><span class="menu_point">My Page</span></a>
+                    <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                    <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                    <a class="mdl-navigation__link" href="Settings.html">Setting</a>
+                    <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                    <a class="mdl-navigation__link" href="../index.html">HOME</a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <img class="mdl-layout-title" src="../img/logo.png" alt="">
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="Messages.html">POST</a>
+                <a class="mdl-navigation__link" href="Card.html">My Card</a>
+                <a class="mdl-navigation__link" href="Mypage.html"><span class="menu_point">My Page</span></a>
+                <a class="mdl-navigation__link" href="OthersOutput.html">Others</a>
+                <a class="mdl-navigation__link" href="Favorite.html">Favorite</a>
+                <a class="mdl-navigation__link" href="Settings.html">Setting</a>
+                <p class="mdl-navigation__link" onclick=signOut()>Sign Out</p>
+                <a class="mdl-navigation__link" href="../index.html">HOME</a>
+            </nav>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="page-content">
+
+                <div class="top">
+                    <div id="user_state" class="user_name"></div>
+                </div>
+
+                <div class="output_box">
+                    <div id="output"></div>
+                </div>
+
+            </div>
+
+
+            <!-- <div class="user_state">
+            <p>あなたのアウトプット数は</p>
+            <div id="outputCount">0</div>
+            <p>です</p>
+            </div> -->
+
+            <!-- Event card -->
+
+        </main>
+    </div>
+
+    <!-- first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+
+
+    <!-- dbキー -->
+    <script src="../js/firebase_key.js"></script>
+    <!-- 検索、クリックアクション -->
+    <script src="../js/output.js"></script>
+    <!-- day.jsの実装 -->
+    <script src="../js/day.js"></script>
+    <script src="../js/day_local.js"></script>
+    <script src="../js/day_plugin.js"></script>
+    <!-- 情報取得 -->
+    <script src="../js/output.js"></script>
+
+    <script src="../js/jquery-3.3.1.min .js "></script>
+
+
+    <script>
+        alert('文章をクリックすると、メディアファイルを閲覧できます');
+        // 日時の取得-----------------------------------------
+        var date = dayjs().format('YYYY/MM/DD HH:mm A', ' JA');
+        console.log(date);
+
+
+        // ログイン情報を取得---------------------------------
+        firebase.auth().onAuthStateChanged(function (user) {
+
+            $(document).ready(function () {
+                // user情報表示
+                var userState = '';
+                userState += `<p>${user.displayName}</p>`;
+                userState += `<img src="${user.photoURL}" alt="" width="80px" height="80px" border="0" />`;
+                $('#user_state').prepend(userState);
+
+                localStorage.setItem('userID', user.uid);
+
+                console.log(user.displayName);
+                console.log(user.uid);
+                console.log(user.photoURL);
+            });
+        });
+
+        var auth_uid = localStorage.getItem('userID');
+        console.log(auth_uid);
+
+        // データベースの参照を準備(グローバル変数)----------
+        var messagesRef = firebase.firestore().collection('MESSAGES');
+        var favoriteRef = firebase.firestore().collection('FAVORITE');
+        var usersRef = firebase.firestore().collection('USERS');
+
+        // データ検索表示
+        $(document).ready(function () {
+            mysearch();
+        });
+
+        // divクリック処理--------------------------------
+        $(function () {
+            $('#output').on('click', '.messages_ID', function () {
+                //    clickしたテキストのIDを取得する
+                var textID = $(this).parent().attr('id');
+                var textTEXT = $(this).text();
+                // console.log(textTEXT);
+
+                // どこにmediaを表示させるのか、上書きする部分を指定する
+                var tPlace = document.getElementById(textID);
+
+                var click_ID = $(this).parent().children();
+                // console.log(click_ID[1]);
+
+
+                // clickしたテキストのIDにあうmediaを取得する
+                var medialocal = localStorage.getItem(textID);
+                // console.log(medialocal);
+                tPlace.innerHTML = medialocal;
+
+
+                // str = '';
+                // str += `<div id="${textID}" class="myout">`;
+                // str += `<p id="${click_ID[0].id}" class="user_ID"></p>`;
+                // str += `<p id="${click_ID[1].id}" class="messages_ID">${textTEXT}</p>`;
+                // str += `<i class="material-icons">photo</i>`;
+                // str += `<p>${date}</p>`;
+
+                // str += `<button id=${textID} class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col speak"><i class="material-icons">play_arrow</i></button>`;
+                // str += `<button id=${textID} class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col cancel"><i class="material-icons">not_interested</i></button>`;
+                // str += `<button id=${textID} class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col pause"><i class="material-icons">pause</i></button>`;
+                // str += `<button id=${textID} class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col resume"><i class="material-icons">replay</i></button>`;
+                // str += `<button id=${textID} class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col delete"><i class="material-icons">delete_sweep</i></button>`;
+                // str += `<button id=${textID} class="mdl-button mdl-js-button mdl-button--primary  mdl-cell mdl-cell--1-col favorite"><i class="material-icons">star_rate</i></button>`;
+                // str += `<input type="tel" pattern="^¥d+$"  id=${textID} class="deleteTime" title="数字でご入力ください"></input>`;
+                // str += `<button id="Minutes"
+                //         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent setTime"><i
+                //         class="material-icons">access_alarm</i>Minutes</button>`;
+                // str += `</div>`;
+
+                // var setlocal = localStorage.setItem(textID, str);
+
+            });
+            // ファイルを何回も変化させる用
+            // $('#output').on('click', '.media', function () {
+            //     var MtextID = $(this).parent().attr('id');
+            //     // console.log(MtextID);
+            //     var Mtext = document.getElementById(MtextID).children[0].src;
+            //     // console.log(Mtext);
+            //     Mstr = '';
+            //     Mstr += `<img src="${Mtext}" id="${MtextID}" class="media"  alt="" width="400px" height="200px" border="0" />`;
+            //     // console.log(Mstr);
+            //     var mPlace = document.getElementById(MtextID);
+            //     // console.log(mPlace);
+            //     var getlocal = localStorage.getItem(MtextID);
+            //     // console.log(getlocal);
+            //     mPlace.innerHTML = getlocal;
+            //     var Msetlocal = localStorage.setItem(MtextID, Mstr);
+            // });
+        });
+
+
+        // 音声合成-----------------------------------------
+        if ('speechSynthesis' in window) {
+            console.log('合成に対応してます');
+        } else {
+            alert('合成に対応していません');
+        }
+
+
+        $('#output').on('click', '.speak', function () {
+            // clickを押した子要素の親idを取得
+            var divID = $(this).parent().attr('id');
+            console.log(divID);
+
+            // clickをした class="speak" のidを取得
+            var textID = $(this, '.speak').attr('id');
+            console.log(textID);
+
+            // 親divとspeakのidが同じならば
+            if (divID == textID) {
+                console.info(true);
+                console.log('再生');
+
+                // clickを押したspeakボタンの親要素に含まれる#chat_textのテキストを取得
+                var docTEXT = $(this).parent().children('.messages_ID').text();
+                console.log(docTEXT);
+
+                // 発言を作成(textarea内のval = textを取ってくる)
+                var uttr = new SpeechSynthesisUtterance(docTEXT);
+
+                // こえの設定------------------------------------
+                // 言語の指定
+                // アメリカ英語：es-US イギリス英語：en-GB 中国語：zh-CN 韓国語：ko-KR
+                // 日本語を指定：ja-JP
+                uttr.lang = 'ja-JP'
+                // 速度(0.1-10)→初期値：１ 倍速：２、半分の倍速：0.5
+                uttr.rate = 1
+                // 音程(高さ 0-1)→初期値：１
+                uttr.pitch = 1
+                // 音量(0-1)→初期値：１
+                uttr.volume = 1
+                // ----------------------------------------------
+
+                // 発言を再生 (発言キューにtextを追加)
+                speechSynthesis.speak(uttr);
+
+                textId = null;
+                divID = null;
+                docTEXT = null;
+                uttr = null;
+
+                // console.log(textId);
+                // console.log(divID);
+                // console.log(docTEXT);
+                // console.log(uttr);
+            } else {
+                console.warn(false);
+                console.log('対象のテキストが異なります');
+            }
+        });
+
+        $('#output').on('click', '.cancel', function () {
+            console.log('停止');
+            // 発言を停止(発言キューをクリアにして止まる) 
+            speechSynthesis.cancel();
+        });
+
+        $('#output').on('click', '.pause', function () {
+            console.log('一時停止');
+            // 一次停止(発言キューを保持して止まる) 
+            speechSynthesis.pause();
+        });
+
+        $('#output').on('click', '.resume', function () {
+            console.log('再開');
+            // 再生再開(一時停止解除) 
+            speechSynthesis.resume();
+        });
+
+        // 時間指定削除---------------------------------------
+        $('#output').on('click', '.setTime', function () {
+            var divID = $(this).parent().attr('id');
+            console.log(divID);
+            let aaaa = "#" + divID;
+            let bbbb = ".deleteTime";
+            console.log(aaaa + bbbb);
+            var tel = $(aaaa + bbbb).val();
+            console.log(tel);
+            var m = 60000;
+            var m2 = 5;
+            setTimeout(function () {
+                messagesRef.doc(divID).delete().then(function () {
+                    console.log('delete');
+                    // consoleにdeleteが出たら、削除実行(m2後に)
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, m2);
+                    console.log(m2);
+                    localStorage.removeItem(divID);
+                }).catch(function (error) {
+                    console.error('error removing document:', error);
+                })
+            }, (tel * m));
+            console.log(tel * m);
+            $('#deleteTime').val('');
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+.mdl-layout__content{
+background: #ffffff;
+}
+
+a {
+    color: #de4020;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body{
+ margin-top: 10%;
+}
